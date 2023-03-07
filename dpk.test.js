@@ -1,4 +1,4 @@
-const { deterministicPartitionKey } = require("./dpk");
+const deterministicPartitionKey = require("./dpk");
 
 const crypto = require("crypto");
 
@@ -21,9 +21,9 @@ describe("deterministicPartitionKey", () => {
   });
 
   it("truncates long partition keys", () => {
-    const event = { foo: "bar" };
+    const event = { eventType: "Test", timestamp: Date.now() };
+    const longKey = "abcdefghijklmnopqrstuvwxyz".repeat(10);
     const hash = crypto.createHash("sha3-512").update(JSON.stringify(event)).digest("hex");
-    const longKey = "a".repeat(300);
     const expectedKey = crypto.createHash("sha3-512").update(longKey).digest("hex");
     expect(deterministicPartitionKey({ ...event, partitionKey: longKey })).toBe(expectedKey);
     expect(deterministicPartitionKey({ ...event, partitionKey: `${longKey}x` })).toBe(hash);
