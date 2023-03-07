@@ -1,6 +1,10 @@
 const crypto = require("crypto");
 
 function deterministicPartitionKey(event) {
+  if (!event) {
+    return "0";
+  }
+
   const MAX_PARTITION_KEY_LENGTH = 256;
   const TRIVIAL_PARTITION_KEY = "0";
 
